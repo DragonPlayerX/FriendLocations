@@ -46,7 +46,7 @@ namespace FriendLocations.Utils
                             OnInfoUpdate?.Invoke();
                         }), new Action<ApiContainer>(container =>
                         {
-                            MelonLogger.Error("Coulsd not fetch ApiUser with id " + queueData.Id);
+                            MelonLogger.Error("Could not fetch ApiUser with id " + queueData.Id);
                         }));
                     }
                     else if (queueData.Type == typeof(ApiWorld))
@@ -163,11 +163,11 @@ namespace FriendLocations.Utils
 
         public static void QueueFetch(string id, Type type, Action<ApiModel> completed, bool priority = false)
         {
-            OnInfoUpdate?.Invoke();
             if (priority)
                 ObjectsToFetch.AddFirst(new QueueData() { Id = id, Type = type, Completed = completed });
             else
                 ObjectsToFetch.AddLast(new QueueData() { Id = id, Type = type, Completed = completed });
+            OnInfoUpdate?.Invoke();
         }
 
         public static IEnumerator LoadImage(string url, RawImage rawImage)

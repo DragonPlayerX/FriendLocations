@@ -18,7 +18,7 @@ API Informations can be disabled in the MelonPreferences or with UIExpansionKit.
 
 ## VRChat API
 
-To prevent malicious API traffic from this mod the API requests are limited to one request in 2-5 seconds. Also the mod checks the internal client cache for objects to minimize count online API requests.
+To prevent malicious API traffic from this mod the API requests are limited to one request in 2-5 seconds. Also the mod checks the internal client cache for objects to minimize count of online API requests.
 
 ---
 

@@ -17,7 +17,7 @@ namespace FriendLocations.UI
         private Text onlineText;
         private Text instanceText;
         private Text privateText;
-        public Dictionary<WorldListManager.WorldInstance, WorldEntry> worlds;
+        private Dictionary<WorldListManager.WorldInstance, WorldEntry> worlds;
 
         public FriendLocationsPage(IntPtr value) : base(value)
         {
