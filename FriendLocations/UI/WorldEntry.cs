@@ -10,6 +10,7 @@ using Object = UnityEngine.Object;
 
 using FriendLocations.Core;
 using FriendLocations.Utils;
+using FriendLocations.Config;
 
 namespace FriendLocations.UI
 {
@@ -36,6 +37,17 @@ namespace FriendLocations.UI
             Text worldName = GameObject.transform.Find("WorldName").GetComponent<Text>();
             RawImage worldImage = GameObject.transform.Find("WorldImage").GetComponent<RawImage>();
             worldButton = worldImage.transform.GetComponent<Button>();
+
+            GameObject instanceInformation = GameObject.transform.Find("WorldInformation").gameObject;
+            Text worldType = instanceInformation.transform.Find("InstanceType").GetComponent<Text>();
+            Text regionName = instanceInformation.transform.Find("InstanceRegion/RegionName").GetComponent<Text>();
+            RawImage regionIcon = instanceInformation.transform.Find("InstanceRegion/RegionIcon").GetComponent<RawImage>();
+
+            GameObject worldStateInfo = GameObject.transform.Find("StateInfo").gameObject;
+            worldStateInfo.SetActive(false);
+
+            instanceInformation.SetActive(false);
+
             ApiWorld apiWorld = APIUtils.FetchAPIWorld(WorldInstance.WorldId);
             if (apiWorld == null)
             {
@@ -46,6 +58,17 @@ namespace FriendLocations.UI
                     {
                         ApiWorld apiWorld = apiModel.Cast<ApiWorld>();
                         worldName.text = apiWorld.name + " #" + WorldInstance.InstanceId;
+                        if (Configuration.ShowInstanceInformation.Value)
+                        {
+                            worldType.text = WorldInstance.InstanceType == InstanceAccessType.Public ? "Public" : WorldInstance.InstanceType == InstanceAccessType.FriendsOfGuests ? "Friends+" : WorldInstance.InstanceType == InstanceAccessType.FriendsOnly ? "Friends" : "Error";
+                            regionName.text = WorldInstance.InstanceRegion == NetworkRegion.US ? "US" : WorldInstance.InstanceRegion == NetworkRegion.Europe ? "EU" : "JP";
+                            regionIcon.texture = WorldInstance.InstanceRegion == NetworkRegion.US ? MenuManager.RegionUSTexture : WorldInstance.InstanceRegion == NetworkRegion.Europe ? MenuManager.RegionEUTexture : MenuManager.RegionJPTexture;
+                            if (!apiWorld.IsPublicPublishedWorld)
+                            {
+                                worldStateInfo.SetActive(true);
+                            }
+                            instanceInformation.SetActive(true);
+                        }
                         worldButton.onClick.AddListener(new Action(() => VRCUtils.OpenWorldInWorldInfoPage(apiWorld, WorldInstance)));
                         MelonCoroutines.Start(APIUtils.LoadImage(apiWorld.imageUrl, worldImage));
                     }
@@ -54,6 +77,17 @@ namespace FriendLocations.UI
             else
             {
                 worldName.text = apiWorld.name + " #" + WorldInstance.InstanceId;
+                if (Configuration.ShowInstanceInformation.Value)
+                {
+                    worldType.text = WorldInstance.InstanceType == InstanceAccessType.Public ? "Public" : WorldInstance.InstanceType == InstanceAccessType.FriendsOfGuests ? "Friends+" : WorldInstance.InstanceType == InstanceAccessType.FriendsOnly ? "Friends" : "Error";
+                    regionName.text = WorldInstance.InstanceRegion == NetworkRegion.US ? "US" : WorldInstance.InstanceRegion == NetworkRegion.Europe ? "EU" : "JP";
+                    regionIcon.texture = WorldInstance.InstanceRegion == NetworkRegion.US ? MenuManager.RegionUSTexture : WorldInstance.InstanceRegion == NetworkRegion.Europe ? MenuManager.RegionEUTexture : MenuManager.RegionJPTexture;
+                    if (!apiWorld.IsPublicPublishedWorld)
+                    {
+                        worldStateInfo.SetActive(true);
+                    }
+                    instanceInformation.SetActive(true);
+                }
                 worldImage.transform.GetComponent<Button>().onClick.AddListener(new Action(() => VRCUtils.OpenWorldInWorldInfoPage(apiWorld, WorldInstance)));
                 MelonCoroutines.Start(APIUtils.LoadImage(apiWorld.imageUrl, worldImage));
             }
@@ -84,7 +118,7 @@ namespace FriendLocations.UI
                 playerInstance.name = userId;
                 playerInstance.SetActive(true);
 
-                Text playerName = playerInstance.transform.Find("PlayerName").GetComponent<Text>();
+                Text playerName = playerInstance.transform.Find("Content/PlayerName").GetComponent<Text>();
                 Button playerButton = playerInstance.transform.GetComponent<Button>();
 
                 APIUser apiUser = APIUtils.FetchAPIUser(userId);

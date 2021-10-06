@@ -23,13 +23,47 @@ namespace FriendLocations.Core
             {
                 APIUser apiUser = entry.Value;
                 string location = apiUser.location;
-                if (location.Equals("private"))
+                InstanceAccessType instanceType = InstanceAccessType.InviteOnly;
+                NetworkRegion networkRegion = NetworkRegion.US;
+
+                if (location.Contains("~private") || location.Equals("private"))
                 {
-                    PrivateCount++;
+                    instanceType = InstanceAccessType.InviteOnly;
                 }
-                else if (location.Contains("~friends") || location.Contains("~hidden") || location.StartsWith("wrld_"))
+                else
+                if (location.Contains("~hidden"))
                 {
-                    WorldInstance worldInstance = new WorldInstance() { Location = location, WorldId = location.Substring(0, location.IndexOf(":")), InstanceId = location.Substring(location.IndexOf(":") + 1, 5) };    
+                    instanceType = InstanceAccessType.FriendsOfGuests;
+                }
+                else if (location.Contains("~friends"))
+                {
+                    instanceType = InstanceAccessType.FriendsOnly;
+                }
+                else if (location.StartsWith("wrld_"))
+                {
+                    instanceType = InstanceAccessType.Public;
+                }
+
+                if (location.Contains("~region"))
+                {
+                    string region = location.Substring(location.IndexOf("~region(") + 8, 2);
+                    switch (region)
+                    {
+                        case "us":
+                            networkRegion = NetworkRegion.US;
+                            break;
+                        case "eu":
+                            networkRegion = NetworkRegion.Europe;
+                            break;
+                        case "jp":
+                            networkRegion = NetworkRegion.Japan;
+                            break;
+                    }
+                }
+
+                if (instanceType == InstanceAccessType.Public || instanceType == InstanceAccessType.FriendsOnly || instanceType == InstanceAccessType.FriendsOfGuests)
+                {
+                    WorldInstance worldInstance = new WorldInstance() { Location = location, WorldId = location.Substring(0, location.IndexOf(":")), InstanceId = location.Substring(location.IndexOf(":") + 1, 5), InstanceType = instanceType, InstanceRegion = networkRegion };
                     if (WorldList.TryGetValue(worldInstance, out List<string> list))
                         list.Add(apiUser.id);
                     else
@@ -49,6 +83,8 @@ namespace FriendLocations.Core
             public string Location;
             public string WorldId;
             public string InstanceId;
+            public InstanceAccessType InstanceType;
+            public NetworkRegion InstanceRegion;
         }
     }
 }

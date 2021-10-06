@@ -28,6 +28,10 @@ namespace FriendLocations.Core
         private static RectTransform friendLocationsUIRect;
         private static FriendLocationsPage pageComponent;
 
+        public static Texture2D RegionUSTexture;
+        public static Texture2D RegionEUTexture;
+        public static Texture2D RegionJPTexture;
+
         public static void PrepareAssets()
         {
             Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("FriendLocations.Resources.friendlocations.assetbundle");
@@ -39,6 +43,13 @@ namespace FriendLocations.Core
             assetBundle.hideFlags |= HideFlags.DontUnloadUnusedAsset;
             FriendLocationsUI = Object.Instantiate(assetBundle.LoadAsset_Internal("Assets/FriendLocationsUI.prefab", Il2CppType.Of<GameObject>()).Cast<GameObject>(), GameObject.Find("UserInterface/MenuContent/Screens").transform);
             FriendLocationsUI.name = "FriendLocationsPage";
+
+            RegionUSTexture = assetBundle.LoadAsset("Assets/Sprites/Region_US.png", Il2CppType.Of<Sprite>()).Cast<Sprite>().texture;
+            RegionUSTexture.hideFlags |= HideFlags.DontUnloadUnusedAsset;
+            RegionEUTexture = assetBundle.LoadAsset("Assets/Sprites/Region_EU.png", Il2CppType.Of<Sprite>()).Cast<Sprite>().texture;
+            RegionEUTexture.hideFlags |= HideFlags.DontUnloadUnusedAsset;
+            RegionJPTexture = assetBundle.LoadAsset("Assets/Sprites/Region_JP.png", Il2CppType.Of<Sprite>()).Cast<Sprite>().texture;
+            RegionJPTexture.hideFlags |= HideFlags.DontUnloadUnusedAsset;
 
             friendLocationsUIRect = FriendLocationsUI.GetComponent<RectTransform>();
             friendLocationsUIRect.pivot = new Vector2(0f, 0f);
@@ -54,7 +65,9 @@ namespace FriendLocations.Core
 
             WorldTemplate = friendLocationsUIRect.Find("WorldList/Layout/Template").gameObject;
             WorldTemplate.transform.Find("WorldName").GetComponent<Text>().font = NormalFont;
-            WorldTemplate.transform.Find("PlayerList/Layout/Template/PlayerName").GetComponent<Text>().font = NormalFont;
+            WorldTemplate.transform.Find("WorldInformation/InstanceType").GetComponent<Text>().font = NormalFont;
+            PlayerTemplate = WorldTemplate.transform.Find("PlayerList/Layout/Template").gameObject;
+            PlayerTemplate.transform.Find("Content/PlayerName").GetComponent<Text>().font = NormalFont;
         }
 
         public static void Init()

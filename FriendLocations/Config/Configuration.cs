@@ -10,13 +10,17 @@ namespace FriendLocations.Config
 
         public static MelonPreferences_Entry<bool> ShowAPIInfo;
         public static MelonPreferences_Entry<bool> UseUIOutlineColor;
+        public static MelonPreferences_Entry<bool> ShowPlayerOutlines;
+        public static MelonPreferences_Entry<bool> ShowInstanceInformation;
 
         public static bool HasChanged;
 
         public static void Init()
         {
             ShowAPIInfo = CreateEntry("ShowAPIInfo", true, "Show API Info");
-            UseUIOutlineColor = CreateEntry("UseUIOutlineColor", true, "Use UI Color");
+            UseUIOutlineColor = CreateEntry("UseUIOutlineColor", false, "Use UI Color");
+            ShowPlayerOutlines = CreateEntry("ShowPlayerOutlines", false, "Show Player Outlines");
+            ShowInstanceInformation = CreateEntry("ShowInstanceInformation", true, "Show Instance Info");
         }
 
         public static void Save()
