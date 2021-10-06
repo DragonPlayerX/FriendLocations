@@ -19,6 +19,8 @@ namespace FriendLocations.UI
         private Text privateText;
         private Dictionary<WorldListManager.WorldInstance, WorldEntry> worlds;
 
+        public bool NeedsReload;
+
         public FriendLocationsPage(IntPtr value) : base(value)
         {
 
@@ -58,7 +60,7 @@ namespace FriendLocations.UI
 
             foreach (KeyValuePair<WorldListManager.WorldInstance, WorldEntry> existingWorld in worlds)
             {
-                if (newWorldList.ContainsKey(existingWorld.Key))
+                if (newWorldList.ContainsKey(existingWorld.Key) && !NeedsReload)
                 {
                     newList.Add(existingWorld.Key, existingWorld.Value);
                     existingWorld.Value.Update();
@@ -90,6 +92,8 @@ namespace FriendLocations.UI
             onlineText.text = "Online: " + WorldListManager.OnlineCount + "/" + WorldListManager.FriendCount;
             instanceText.text = "Instances: " + WorldListManager.WorldList.Count;
             privateText.text = "Private: " + WorldListManager.PrivateCount;
+
+            NeedsReload = false;
         }
     }
 }

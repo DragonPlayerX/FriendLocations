@@ -98,7 +98,7 @@ namespace FriendLocations.UI
                             APIUser apiUser = apiModel.Cast<APIUser>();
                             playerName.text = apiUser.displayName;
                             playerName.color = VRCUtils.GetRankColor(VRCPlayer.Method_Private_Static_String_APIUser_0(apiUser));
-                            playerButton.onClick.AddListener(new Action(() => UiManager.OpenUserInUserInfoPage(apiUser, true)));
+                            playerButton.onClick.AddListener(new Action(() => UiManager.OpenUserInUserInfoPage(apiUser, false)));
                         }
                     }));
                 }
@@ -106,7 +106,7 @@ namespace FriendLocations.UI
                 {
                     playerName.text = apiUser.displayName;
                     playerName.color = VRCUtils.GetRankColor(VRCPlayer.Method_Private_Static_String_APIUser_0(apiUser));
-                    playerButton.onClick.AddListener(new Action(() => UiManager.OpenUserInUserInfoPage(apiUser, true)));
+                    playerButton.onClick.AddListener(new Action(() => UiManager.OpenUserInUserInfoPage(apiUser, false)));
                 }
                 newList.Add(userId, new PlayerEntry() { GameObject = playerInstance, Button = playerButton });
             }

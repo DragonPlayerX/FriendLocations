@@ -2,7 +2,6 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Collections;
 using MelonLoader;
 using HarmonyLib;
 using UnhollowerRuntimeLib;
@@ -23,8 +22,9 @@ namespace FriendLocations.Core
         public static Font NormalFont;
         public static Font BoldFont;
         public static GameObject WorldTemplate;
+        public static GameObject PlayerTemplate;
 
-        private static GameObject friendLocationsUI;
+        public static GameObject FriendLocationsUI;
         private static RectTransform friendLocationsUIRect;
         private static FriendLocationsPage pageComponent;
 
@@ -37,20 +37,20 @@ namespace FriendLocations.Core
 
             AssetBundle assetBundle = AssetBundle.LoadFromMemory_Internal(memoryStream.ToArray(), 0);
             assetBundle.hideFlags |= HideFlags.DontUnloadUnusedAsset;
-            friendLocationsUI = Object.Instantiate(assetBundle.LoadAsset_Internal("Assets/FriendLocationsUI.prefab", Il2CppType.Of<GameObject>()).Cast<GameObject>(), GameObject.Find("UserInterface/MenuContent/Screens").transform);
-            friendLocationsUI.name = "FriendLocationsPage";
+            FriendLocationsUI = Object.Instantiate(assetBundle.LoadAsset_Internal("Assets/FriendLocationsUI.prefab", Il2CppType.Of<GameObject>()).Cast<GameObject>(), GameObject.Find("UserInterface/MenuContent/Screens").transform);
+            FriendLocationsUI.name = "FriendLocationsPage";
 
-            friendLocationsUIRect = friendLocationsUI.GetComponent<RectTransform>();
+            friendLocationsUIRect = FriendLocationsUI.GetComponent<RectTransform>();
             friendLocationsUIRect.pivot = new Vector2(0f, 0f);
 
             friendLocationsUIRect.Find("Version").GetComponent<Text>().text = "Version\n" + FriendLocationsMod.Version;
 
-            friendLocationsUI.SetActive(false);
+            FriendLocationsUI.SetActive(false);
 
             NormalFont = GameObject.Find("UserInterface/MenuContent/Screens/Settings/OtherOptionsPanel/TooltipsToggle/Label").GetComponent<Text>().font;
             BoldFont = GameObject.Find("UserInterface/MenuContent/Screens/Settings/OtherOptionsPanel/TitleText (1)").GetComponent<Text>().font;
 
-            friendLocationsUI.transform.Find("Title").GetComponent<Text>().font = BoldFont;
+            FriendLocationsUI.transform.Find("Title").GetComponent<Text>().font = BoldFont;
 
             WorldTemplate = friendLocationsUIRect.Find("WorldList/Layout/Template").gameObject;
             WorldTemplate.transform.Find("WorldName").GetComponent<Text>().font = NormalFont;
@@ -82,7 +82,7 @@ namespace FriendLocations.Core
 
             flButton.SetActive(true);
 
-            pageComponent = friendLocationsUI.AddComponent<FriendLocationsPage>();
+            pageComponent = FriendLocationsUI.AddComponent<FriendLocationsPage>();
             pageComponent.field_Public_String_0 = "SCREEN";
             pageComponent.Prepare();
 
@@ -92,7 +92,7 @@ namespace FriendLocations.Core
                 pageComponent.ApiObjectInfoText.gameObject.SetActive(newValue);
             });
 
-            Button backButton = Object.Instantiate(GameObject.Find("UserInterface/MenuContent/Screens/WorldInfo/Back Button"), friendLocationsUI.transform).GetComponent<Button>();
+            Button backButton = Object.Instantiate(GameObject.Find("UserInterface/MenuContent/Screens/WorldInfo/Back Button"), FriendLocationsUI.transform).GetComponent<Button>();
             backButton.onClick.RemoveAllListeners();
             backButton.onClick.AddListener(new Action(() => UiManager.MainMenu(2, false, true, false)));
             backButton.gameObject.SetActive(true);
@@ -111,7 +111,7 @@ namespace FriendLocations.Core
             {
                 WorldListManager.FetchLists();
                 pageComponent.UpdatePage();
-                MelonCoroutines.Start(WaitOneFrame(new Action(() => friendLocationsTabPage.ShowPage())));
+                friendLocationsTabPage.ShowPage();
             }));
 
             FriendLocationsMod.Instance.HarmonyInstance.Patch(typeof(VRCUiPageTab).GetMethod("ShowPage"), new HarmonyMethod(typeof(MenuManager).GetMethod(nameof(ShowPage), BindingFlags.NonPublic | BindingFlags.Static)));
@@ -122,10 +122,9 @@ namespace FriendLocations.Core
             pageComponent.field_Public_String_0 = "SCREEN";
         }
 
-        private static IEnumerator WaitOneFrame(Action action)
+        public static void RequireUpdate()
         {
-            yield return null;
-            action.Invoke();
+            pageComponent.NeedsReload = true;
         }
     }
 }

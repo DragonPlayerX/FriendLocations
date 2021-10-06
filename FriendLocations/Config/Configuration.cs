@@ -9,12 +9,14 @@ namespace FriendLocations.Config
         private static readonly MelonPreferences_Category Category = MelonPreferences.CreateCategory("FriendLocations", "Friend Locations");
 
         public static MelonPreferences_Entry<bool> ShowAPIInfo;
+        public static MelonPreferences_Entry<bool> UseUIOutlineColor;
 
         public static bool HasChanged;
 
         public static void Init()
         {
             ShowAPIInfo = CreateEntry("ShowAPIInfo", true, "Show API Info");
+            UseUIOutlineColor = CreateEntry("UseUIOutlineColor", true, "Use UI Color");
         }
 
         public static void Save()

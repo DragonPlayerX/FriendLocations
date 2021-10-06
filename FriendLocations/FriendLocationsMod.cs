@@ -36,6 +36,7 @@ namespace FriendLocations
 
             MenuManager.PrepareAssets();
             MenuManager.Init();
+            TemplateManager.PrepareTemplates();
 
             APIUtils.Init();
 
