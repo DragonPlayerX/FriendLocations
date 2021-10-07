@@ -30,6 +30,8 @@ namespace FriendLocations.Core
                 MenuManager.PlayerTemplate.transform.Find("PlayerOutline").gameObject.SetActive(newValue);
                 MenuManager.RequireUpdate();
             });
+
+            Configuration.DynamicListScale.OnValueChangedUntyped += new Action(() => MenuManager.RequireUpdate());
         }
 
         private static void ApplyUseUIOutlineColor(bool value)

@@ -8,14 +8,14 @@ using FriendLocations.UI;
 using FriendLocations.Utils;
 using FriendLocations.Config;
 
-[assembly: MelonInfo(typeof(FriendLocationsMod), "FriendLocations", "1.0.0", "DragonPlayer", "https://github.com/DragonPlayerX/FriendLocations")]
+[assembly: MelonInfo(typeof(FriendLocationsMod), "FriendLocations", "1.1.0", "DragonPlayer", "https://github.com/DragonPlayerX/FriendLocations")]
 [assembly: MelonGame("VRChat", "VRChat")]
 
 namespace FriendLocations
 {
     public class FriendLocationsMod : MelonMod
     {
-        public static readonly string Version = "1.0.0";
+        public static readonly string Version = "1.1.0";
 
         public static FriendLocationsMod Instance { get; private set; }
 

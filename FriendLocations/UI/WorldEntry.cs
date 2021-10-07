@@ -99,9 +99,40 @@ namespace FriendLocations.UI
             List<string> players = WorldListManager.WorldList.TryGetValue(WorldInstance, out List<string> list) ? list : new List<string>();
             Dictionary<string, PlayerEntry> newList = new Dictionary<string, PlayerEntry>();
 
+            bool recalculateSize = ((PlayerList.Count <= 8 && players.Count > 8) || (PlayerList.Count > 8 && players.Count <= 8)) && Configuration.DynamicListScale.Value;
+
+            if (recalculateSize)
+            {
+                Vector2 newSize;
+                Vector3 newPosition;
+                int fontSize;
+                if (players.Count > 8)
+                {
+                    newSize = new Vector2(280, 35);
+                    newPosition = new Vector3(140, -17.5f);
+                    fontSize = 25;
+                }
+                else
+                {
+                    newSize = new Vector2(400, 50);
+                    newPosition = new Vector3(200, -25);
+                    fontSize = 32;
+                }
+
+                playerListObject.GetComponent<GridLayoutGroup>().cellSize = newSize;
+                RectTransform playerName = playerTemplate.transform.Find("PlayerName").GetComponent<RectTransform>();
+                playerName.sizeDelta = newSize;
+                playerName.anchoredPosition = newPosition;
+                playerTemplate.transform.Find("PlayerOutline").GetComponent<RectTransform>().sizeDelta = newSize;
+
+                Text playerNameText = playerTemplate.transform.Find("PlayerName").GetComponent<Text>();
+                playerNameText.fontSize = fontSize;
+                playerNameText.resizeTextMaxSize = fontSize;
+            }
+
             foreach (KeyValuePair<string, PlayerEntry> user in PlayerList)
             {
-                if (players.Contains(user.Key))
+                if (players.Contains(user.Key) && !recalculateSize)
                 {
                     newList.Add(user.Key, user.Value);
                     players.Remove(user.Key);
@@ -118,8 +149,8 @@ namespace FriendLocations.UI
                 playerInstance.name = userId;
                 playerInstance.SetActive(true);
 
-                Text playerName = playerInstance.transform.Find("Content/PlayerName").GetComponent<Text>();
                 Button playerButton = playerInstance.transform.GetComponent<Button>();
+                Text playerName = playerInstance.transform.Find("PlayerName").GetComponent<Text>();
 
                 APIUser apiUser = APIUtils.FetchAPIUser(userId);
                 if (apiUser == null)

@@ -12,6 +12,7 @@ namespace FriendLocations.Config
         public static MelonPreferences_Entry<bool> UseUIOutlineColor;
         public static MelonPreferences_Entry<bool> ShowPlayerOutlines;
         public static MelonPreferences_Entry<bool> ShowInstanceInformation;
+        public static MelonPreferences_Entry<bool> DynamicListScale;
 
         public static bool HasChanged;
 
@@ -21,6 +22,7 @@ namespace FriendLocations.Config
             UseUIOutlineColor = CreateEntry("UseUIOutlineColor", false, "Use UI Color");
             ShowPlayerOutlines = CreateEntry("ShowPlayerOutlines", false, "Show Player Outlines");
             ShowInstanceInformation = CreateEntry("ShowInstanceInformation", true, "Show Instance Info");
+            DynamicListScale = CreateEntry("DynamicListScale", false, "Dynamic Scale of PlayerList");
         }
 
         public static void Save()

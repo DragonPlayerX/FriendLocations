@@ -2,12 +2,15 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Collections;
 using MelonLoader;
 using HarmonyLib;
 using UnhollowerRuntimeLib;
 using UnityEngine;
 using UnityEngine.UI;
+using VRC.Core;
 using VRChatUtilityKit.Ui;
+using VRChatUtilityKit.Components;
 
 using Object = UnityEngine.Object;
 
@@ -67,7 +70,7 @@ namespace FriendLocations.Core
             WorldTemplate.transform.Find("WorldName").GetComponent<Text>().font = NormalFont;
             WorldTemplate.transform.Find("WorldInformation/InstanceType").GetComponent<Text>().font = NormalFont;
             PlayerTemplate = WorldTemplate.transform.Find("PlayerList/Layout/Template").gameObject;
-            PlayerTemplate.transform.Find("Content/PlayerName").GetComponent<Text>().font = NormalFont;
+            PlayerTemplate.transform.Find("PlayerName").GetComponent<Text>().font = NormalFont;
         }
 
         public static void Init()
@@ -105,9 +108,15 @@ namespace FriendLocations.Core
                 pageComponent.ApiObjectInfoText.gameObject.SetActive(newValue);
             });
 
-            Button backButton = Object.Instantiate(GameObject.Find("UserInterface/MenuContent/Screens/WorldInfo/Back Button"), FriendLocationsUI.transform).GetComponent<Button>();
+            Button backButton = Object.Instantiate(GameObject.Find("UserInterface/MenuContent/Screens/UserInfo/BackButton"), FriendLocationsUI.transform).GetComponent<Button>();
             backButton.onClick.RemoveAllListeners();
-            backButton.onClick.AddListener(new Action(() => UiManager.MainMenu(2, false, true, false)));
+            backButton.onClick.AddListener(new Action(() =>
+            {
+                UiManager.MainMenu(2, false, true, false);
+
+                // Setting back UserInfo to the local player property to prevent showing the wrong user when clicking on "Edit Profile"
+                QuickMenu.field_Private_Static_QuickMenu_0.field_Private_APIUser_0 = APIUser.CurrentUser;
+            }));
             backButton.gameObject.SetActive(true);
 
             GameObject hiddenTabs = new GameObject("Hidden");
@@ -124,7 +133,7 @@ namespace FriendLocations.Core
             {
                 WorldListManager.FetchLists();
                 pageComponent.UpdatePage();
-                friendLocationsTabPage.ShowPage();
+                MelonCoroutines.Start(WaitOneFrame(new Action(() => friendLocationsTabPage.ShowPage())));
             }));
 
             FriendLocationsMod.Instance.HarmonyInstance.Patch(typeof(VRCUiPageTab).GetMethod("ShowPage"), new HarmonyMethod(typeof(MenuManager).GetMethod(nameof(ShowPage), BindingFlags.NonPublic | BindingFlags.Static)));
@@ -138,6 +147,12 @@ namespace FriendLocations.Core
         public static void RequireUpdate()
         {
             pageComponent.NeedsReload = true;
+        }
+
+        private static IEnumerator WaitOneFrame(Action action)
+        {
+            yield return null;
+            action.Invoke();
         }
     }
 }

@@ -177,9 +177,14 @@ namespace FriendLocations.Utils
             while (!asyncOperation.isDone)
                 yield return null;
             if (!webRequest.isNetworkError && !webRequest.isHttpError)
-                rawImage.texture = DownloadHandlerTexture.GetContent(webRequest);
+            {
+                if (rawImage != null)
+                    rawImage.texture = DownloadHandlerTexture.GetContent(webRequest);
+            }
             else
+            {
                 MelonLogger.Warning("Failed to load image: " + url);
+            }
         }
 
         public static int GetCurrentQueueCount()
