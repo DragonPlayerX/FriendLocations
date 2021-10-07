@@ -12,10 +12,11 @@ Adds a new UI page where you can see all your online friends you could join list
 - Shows Instance Type, Region and Publish State of the worlds
 - UI Color can be auto adjusted to the rest of VRChat UI
 - Borders can be showed around players to see them better
+- API Informations are available
+
+Most things can be enabled/disabled in the MelonPreferences or with UIExpansionKit.
 
 The button to access the menu is on the social page at the top of screen.
-
-API Informations can be disabled in the MelonPreferences or with UIExpansionKit.
 
 ---
 
