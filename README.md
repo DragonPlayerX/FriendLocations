@@ -8,7 +8,10 @@
 ## Features
 
 Adds a new UI page where you can see all your online friends you could join listed by instances. (Basically like the VRChat Website)
-World Images and Player Names are clickable and points to the corresponding info page.
+- World Images and Player Names are clickable and points to the corresponding info page
+- Shows Instance Type, Region and Publish State of the worlds
+- UI Color can be auto adjusted to the rest of VRChat UI
+- Borders can be showed around players to see them better
 
 The button to access the menu is on the social page at the top of screen.
 
@@ -23,7 +26,7 @@ To prevent malicious API traffic from this mod the API requests are limited to o
 ---
 
 ### Menu Screenshot
-![UI Screenshot](https://i.imgur.com/6uOOYVV.png)
+![UI Screenshot](https://i.imgur.com/Vj4v11t.png)
 
 ---
 
