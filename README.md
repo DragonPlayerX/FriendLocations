@@ -1,6 +1,6 @@
 # Friend Locations
 
-## **This project will be ended as soon as the new VRChat UI is release!**
+## **This project will be ended as soon as the new VRChat UI is released!**
 
 ## Requirements
 
