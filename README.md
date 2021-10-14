@@ -1,5 +1,7 @@
 # Friend Locations
 
+## **This project will be ended as soon as the new VRChat UI is release!**
+
 ## Requirements
 
 - [MelonLoader 0.4.x](https://melonwiki.xyz/)
