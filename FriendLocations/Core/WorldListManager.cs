@@ -44,22 +44,12 @@ namespace FriendLocations.Core
                     instanceType = InstanceAccessType.Public;
                 }
 
-                if (location.Contains("~region"))
-                {
-                    string region = location.Substring(location.IndexOf("~region(") + 8, 2);
-                    switch (region)
-                    {
-                        case "us":
-                            networkRegion = NetworkRegion.US;
-                            break;
-                        case "eu":
-                            networkRegion = NetworkRegion.Europe;
-                            break;
-                        case "jp":
-                            networkRegion = NetworkRegion.Japan;
-                            break;
-                    }
-                }
+                if (location.Contains("~region(us)"))
+                    networkRegion = NetworkRegion.US;
+                else if (location.Contains("~region(eu)"))
+                    networkRegion = NetworkRegion.Europe;
+                else if (location.Contains("~region(jp)"))
+                    networkRegion = NetworkRegion.Japan;
 
                 if (instanceType == InstanceAccessType.Public || instanceType == InstanceAccessType.FriendsOnly || instanceType == InstanceAccessType.FriendsOfGuests)
                 {
