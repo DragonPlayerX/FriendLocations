@@ -53,7 +53,12 @@ namespace FriendLocations.Core
 
                 if (instanceType == InstanceAccessType.Public || instanceType == InstanceAccessType.FriendsOnly || instanceType == InstanceAccessType.FriendsOfGuests)
                 {
-                    WorldInstance worldInstance = new WorldInstance() { Location = location, WorldId = location.Substring(0, location.IndexOf(":")), InstanceId = location.Substring(location.IndexOf(":") + 1, 5), InstanceType = instanceType, InstanceRegion = networkRegion };
+                    WorldInstance worldInstance;
+                    if (instanceType == InstanceAccessType.Public)
+                        worldInstance = new WorldInstance() { Location = location, WorldId = location.Substring(0, location.IndexOf(":")), InstanceId = location.Substring(location.IndexOf(":") + 1), InstanceType = instanceType, InstanceRegion = networkRegion };
+                    else
+                        worldInstance = new WorldInstance() { Location = location, WorldId = location.Substring(0, location.IndexOf(":")), InstanceId = location.Substring(location.IndexOf(":") + 1, 5), InstanceType = instanceType, InstanceRegion = networkRegion };
+
                     if (WorldList.TryGetValue(worldInstance, out List<string> list))
                         list.Add(apiUser.id);
                     else
