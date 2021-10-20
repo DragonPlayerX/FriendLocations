@@ -55,7 +55,12 @@ namespace FriendLocations.Core
                 {
                     WorldInstance worldInstance;
                     if (instanceType == InstanceAccessType.Public)
-                        worldInstance = new WorldInstance() { Location = location, WorldId = location.Substring(0, location.IndexOf(":")), InstanceId = location.Substring(location.IndexOf(":") + 1), InstanceType = instanceType, InstanceRegion = networkRegion };
+                    {
+                        if (location.Contains("~region"))
+                            worldInstance = new WorldInstance() { Location = location, WorldId = location.Substring(0, location.IndexOf(":")), InstanceId = location.Substring(location.IndexOf(":") + 1, location.Length - location.IndexOf("~region") - 6), InstanceType = instanceType, InstanceRegion = networkRegion };
+                        else
+                            worldInstance = new WorldInstance() { Location = location, WorldId = location.Substring(0, location.IndexOf(":")), InstanceId = location.Substring(location.IndexOf(":") + 1), InstanceType = instanceType, InstanceRegion = networkRegion };
+                    }
                     else
                         worldInstance = new WorldInstance() { Location = location, WorldId = location.Substring(0, location.IndexOf(":")), InstanceId = location.Substring(location.IndexOf(":") + 1, 5), InstanceType = instanceType, InstanceRegion = networkRegion };
 
