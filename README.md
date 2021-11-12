@@ -1,6 +1,6 @@
 # Friend Locations
 
-## **This project will be ended as soon as the new VRChat UI is released!**
+## **NO UPDATE FOR VRCHAT BUILD 1149 (and higher) IS PLANNED CURRENTLY!**
 
 ## Requirements
 
